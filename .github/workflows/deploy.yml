@@ -2,7 +2,7 @@ name: Deploy counselling to GitHub Pages
 
 on:
   push:
-    branches: [ "main" ]  # 기본 브랜치 확인 후 필요 시 수정
+    branches: [ "main" ]
   workflow_dispatch:
 
 permissions:
@@ -26,11 +26,18 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Inject env (Vite expects VITE_* vars)
+        run: echo "VITE_GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" >> $GITHUB_ENV
+
       - name: Install dependencies
         run: npm install
 
       - name: Build
         run: npm run build
+
+      # 🔹 SPA fallback: 모든 경로를 index.html로 매핑
+      - name: Create 404 fallback
+        run: cp dist/index.html dist/404.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

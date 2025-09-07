@@ -2,7 +2,7 @@ name: Deploy counselling to GitHub Pages
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main" ]  # 기본 브랜치가 다르면 수정
   workflow_dispatch:
 
 permissions:
@@ -35,7 +35,7 @@ jobs:
       - name: Build
         run: npm run build
 
-      # 🔹 SPA fallback: 모든 경로를 index.html로 매핑
+      # SPA 라우팅 대응
       - name: Create 404 fallback
         run: cp dist/index.html dist/404.html
 
